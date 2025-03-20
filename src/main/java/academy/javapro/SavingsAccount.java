@@ -1,57 +1,36 @@
-package academy.javapro;
+package Midterm;
 
-/**
- * SavingsAccount class extending the abstract Account class.
- * Features interest rate and minimum balance requirement.
- */
 public class SavingsAccount extends Account {
-    private final double interestRate;
-    private static final double MIN_BALANCE = 100.0; // Minimum balance requirement
+    private double interestRate;
+    private static final double MIN_BALANCE = 100.0;
+    private static final double TRANSACTION_FEE = 2.00;
 
-    /**
-     * Constructor for creating a new savings account.
-     *
-     * @param accountNumber The account number
-     * @param customerName The name of the account holder
-     * @param initialBalance The initial balance
-     * @param interestRate The annual interest rate (%)
-     */
     public SavingsAccount(String accountNumber, String customerName, double initialBalance, double interestRate) {
-        super(accountNumber, customerName, initialBalance); // Call to the parent constructor
+        super(accountNumber, customerName, initialBalance);
         this.interestRate = interestRate;
     }
 
-    /**
-     * Calculates the interest amount based on the current balance.
-     *
-     * @return The calculated interest amount
-     */
-    public double calculateInterest() {
-        throw new UnsupportedOperationException("Method not implemented");
-    }
-
-    /**
-     * Applies the calculated interest to the account balance.
-     */
-    public void applyInterest() {
-        throw new UnsupportedOperationException("Method not implemented");
-    }
-
-    /**
-     * Overrides the withdraw method with savings account-specific rules.
-     * Ensures minimum balance is maintained.
-     */
     @Override
     public void withdraw(double amount) {
-        throw new UnsupportedOperationException("Method not implemented");
+        if (getBalance() - amount - TRANSACTION_FEE < MIN_BALANCE) {
+            System.out.println("Cannot withdraw $" + amount + ". Minimum balance of $" + MIN_BALANCE + " must be maintained.");
+            return;
+        }
+        setBalance(getBalance() - amount - TRANSACTION_FEE);
+        logTransaction("WITHDRAWAL", amount);
+        logTransaction("FEE", TRANSACTION_FEE);
     }
 
-    /**
-     * Overrides the displayInfo method to include savings account-specific information.
-     */
+    public void applyInterest() {
+        double interest = getBalance() * (interestRate / 100);
+        setBalance(getBalance() + interest);
+        logTransaction("INTEREST", interest);
+        System.out.println("Interest applied: $" + interest);
+    }
+
     @Override
     public void displayInfo() {
-        super.displayInfo(); // Call to the parent method
+        super.displayInfo();
         System.out.println("Account Type: Savings Account");
         System.out.println("Interest Rate: " + interestRate + "%");
         System.out.println("Minimum Balance Requirement: $" + MIN_BALANCE);
